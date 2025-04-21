@@ -20,6 +20,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<String> createProduct(@RequestBody Product product) {
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        String productId = productService.createProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productId);
     }
 }
