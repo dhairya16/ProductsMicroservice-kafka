@@ -21,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String createProduct(Product product) {
+    public String createProduct(Product product) throws Exception {
         String productId = UUID.randomUUID().toString();
         ProductCreatedEvent productCreatedEvent = ProductCreatedEvent.builder()
                 .productId(productId)
@@ -30,14 +30,8 @@ public class ProductServiceImpl implements ProductService {
                 .quantity(product.getQuantity())
                 .build();
 
-        CompletableFuture<SendResult<String, ProductCreatedEvent>> futureObj = kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent);
-        futureObj.whenComplete((result, exception) -> {
-            if (exception != null) {
-                LOGGER.error("Failed to send message {}", exception.getMessage());
-            } else {
-                LOGGER.info("Message sent successfully {}", result.getRecordMetadata());
-            }
-        });
+        SendResult<String, ProductCreatedEvent> result =
+                kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
 
         return productId;
     }
