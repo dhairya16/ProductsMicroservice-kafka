@@ -1,5 +1,6 @@
 package com.dkode.ws.products.service;
 
+import com.dcode.ws.core.ProductCreatedEvent;
 import com.dkode.ws.products.model.Product;
 import org.springframework.kafka.support.SendResult;
 import org.slf4j.LoggerFactory;
