@@ -2,6 +2,7 @@ package com.dkode.ws.products.service;
 
 import com.dcode.ws.core.ProductCreatedEvent;
 import com.dkode.ws.products.model.Product;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.support.SendResult;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -31,8 +32,15 @@ public class ProductServiceImpl implements ProductService {
                 .quantity(product.getQuantity())
                 .build();
 
+        ProducerRecord<String, ProductCreatedEvent> record = new ProducerRecord<>(
+                "product-created-events-topic",
+                productId,
+                productCreatedEvent
+        );
+        record.headers().add("messageId", UUID.randomUUID().toString().getBytes());
+
         SendResult<String, ProductCreatedEvent> result =
-                kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
+                kafkaTemplate.send(record).get();
 
         return productId;
     }

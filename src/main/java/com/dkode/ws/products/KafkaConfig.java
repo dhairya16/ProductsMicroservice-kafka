@@ -1,6 +1,6 @@
 package com.dkode.ws.products;
 
-import com.dkode.ws.products.service.ProductCreatedEvent;
+import com.dcode.ws.core.ProductCreatedEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
